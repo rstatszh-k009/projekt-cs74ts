@@ -1,0 +1,32 @@
+---
+title: "index.qmd"
+format: html
+editor: visual
+---
+
+```{r}
+library(tidyverse)
+```
+
+```{r}
+data1 <- read_csv("/cloud/project/daten/raw/KANTON_ZUERICH_315.csv")
+```
+
+# Einleitung 
+
+-   Plotte 25 / 25 / 75 - Quantile des Steuerbaren Einkommens von natürlichen Personen auf Gemeindekarte der Zürcher Gemeinden.
+
+Daten: \
+- 25 / 25 / 75 - Quantile des Steuerbaren Einkommens (jeweils ein csv file)
+
+-   shp-file mit administrativen Gemeindegrenzen der Zürcher Gemeinden
+
+    ***--\> To do: Beschreibung noch ergänzen***
+
+## Daten 
+
+## Analyseziele 
+
+# Daten Aufbereitung 
+
+# Daten Visualisierung
