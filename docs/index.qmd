@@ -2,31 +2,137 @@
 title: "index.qmd"
 format: html
 editor: visual
+author: cs74ts
 ---
 
-```{r}
+# Einleitung
+
+Im Rahmen dieser Arbeit sollen die regionalen Unterschiede im Einkommen von natürlichen Personen innerhalb des Kantons Zürich betrachtet werden. wird das steuerbare Einkommen natürlicher Personen im Kanton Zürich betrachtet. Plotte 25 / 25 / 75 - Quantile des Steuerbaren Einkommens von natürlichen Personen auf Gemeindekarte der Zürcher Gemeinden.
+
+## Daten
+
+Die verwendeten Daten umfassen zum einen das 25%-Quantil [^1] / das 50%-Prozent [^2] und das 75%-Quantil[^3] des steuerbaren Einkommens natürlicher Personen in den Gemeinden des Kantons Zürich. Diese Daten werden vom Kanton Zürich als OGD-Daten bereit gestellt. Um diese Einkommensinformationen kartographisch darzustellen wird darüber hinaus ein Shapefile, welches Gemeindegrenzen Zürcher Gemeinden verwendet. Stand 26.01.2024.
+
+[^1]: [https://www.zh.ch/de/politik-staat/statistik-daten/datenkatalog.html#/datasets/245\@statistisches-amt-kanton-zuerich](https://www.zh.ch/de/politik-staat/statistik-daten/datenkatalog.html#/datasets/245@statistisches-amt-kanton-zuerich)
+
+[^2]: [https://www.zh.ch/de/politik-staat/statistik-daten/datenkatalog.html#/datasets/246\@statistisches-amt-kanton-zuerich](https://www.zh.ch/de/politik-staat/statistik-daten/datenkatalog.html#/datasets/246@statistisches-amt-kanton-zuerich)
+
+[^3]: [https://www.zh.ch/de/politik-staat/statistik-daten/datenkatalog.html#/datasets/249\@statistisches-amt-kanton-zuerich](https://www.zh.ch/de/politik-staat/statistik-daten/datenkatalog.html#/datasets/249@statistisches-amt-kanton-zuerich)
+
+## Analyseziele
+
+# Daten Aufbereitung
+
+Laden der Packages
+
+```{r warning = FALSE}
 library(tidyverse)
+library(sf)
+library(ggplot2)
 ```
+
+## Einlesen der Daten
+
+```{r include FALSE}
+## Read in data 
+data_q25 <- read_csv("/cloud/project/daten/raw/KANTON_ZUERICH_315.csv")
+
+data_q50 <- read_csv("/cloud/project/daten/raw/KANTON_ZUERICH_316.csv")
+
+data_q75 <- read_csv("/cloud/project/daten/raw/KANTON_ZUERICH_318.csv")
+
+# Geodaten Gemeinden Kanton Zürich - Stand 26.01.2024
+municipality_prod_geo <- read_sf("/cloud/project/daten/raw/UP_GEMEINDEN_F.shp")
+```
+
+## Aufbereitung der Daten für Analyse
 
 ```{r}
-data1 <- read_csv("/cloud/project/daten/raw/KANTON_ZUERICH_315.csv")
+
+# Check latest year for which information is available 
+glimpse(data_q25) 
+data_q25 |> count(INDIKATOR_JAHR) |> print(n = Inf)
+
+glimpse(data_q50) 
+data_q50 |> count(INDIKATOR_JAHR) |> print(n = Inf)
+
+glimpse(data_q75) 
+data_q75 |> count(INDIKATOR_JAHR) |> print(n = Inf)
+
+glimpse(municipality_prod_geo)
+
+## filter out latest year for all three data sets 
+data_q25_2018 <- data_q25 |> filter(INDIKATOR_JAHR == 2018)
+data_q25_2018 <- data_q25_2018 |> filter(BFS_NR > 0)
+
+data_q50_2018 <- data_q50 |> filter(INDIKATOR_JAHR == 2018)
+data_q50_2018 <- data_q50_2018 |> filter(BFS_NR > 0)
+
+data_q75_2018 <- data_q75 |> filter(INDIKATOR_JAHR == 2018)
+data_q75_2018 <- data_q75_2018 |> filter(BFS_NR > 0)
+
+# Change identifier to character for merge 
+#Q25 
+data_q25_2018$BFS_N <- as.character(data_q25_2018$BFS_NR)
+municipality_prod_geo$BFS_N <- as.character(municipality_prod_geo$BFS)
+
+#Q50
+data_q50_2018$BFS_N <- as.character(data_q50_2018$BFS_NR)
+
+#Q75
+data_q75_2018$BFS_N <- as.character(data_q75_2018$BFS_NR)
+
+
+## join data sets with shapefile 
+municipality_q25 <- left_join(municipality_prod_geo, data_q25_2018, by = "BFS_N")
+municipality_q50 <- left_join(municipality_prod_geo, data_q50_2018, by = "BFS_N")
+municipality_q75 <- left_join(municipality_prod_geo, data_q75_2018, by = "BFS_N")
 ```
-
-# Einleitung 
-
--   Plotte 25 / 25 / 75 - Quantile des Steuerbaren Einkommens von natürlichen Personen auf Gemeindekarte der Zürcher Gemeinden.
-
-Daten: \
-- 25 / 25 / 75 - Quantile des Steuerbaren Einkommens (jeweils ein csv file)
-
--   shp-file mit administrativen Gemeindegrenzen der Zürcher Gemeinden
-
-    ***--\> To do: Beschreibung noch ergänzen***
-
-## Daten 
-
-## Analyseziele 
-
-# Daten Aufbereitung 
 
 # Daten Visualisierung
+
+```{r}
+## create maps 
+
+# Create map with 25 Percent Quantil 
+ggplot() + 
+  geom_sf(data = municipality_q25, aes(fill=INDIKATOR_VALUE), color = "#FFFFFF", size = 0.2) +
+  scale_fill_viridis_c(name = "Value", option = "mako") +
+  labs(title = "Steuerbares Einkommen der natürlichen Personen - 25%-Quantil",
+       subtitle = "Gemeinden des Kantons Zürich") +
+  theme_minimal() +
+  theme(
+    axis.text = element_blank(),
+    axis.ticks = element_blank(),
+    panel.grid = element_blank(),
+    legend.position = "right"
+  )
+
+# Create map with 50 Percent Quantil 
+ggplot() + 
+  geom_sf(data = municipality_q50, aes(fill=INDIKATOR_VALUE), color = "#FFFFFF", size = 0.2) +
+  scale_fill_viridis_c(name = "Value", option = "mako") +
+  labs(title = "Steuerbares Einkommen der natürlichen Personen - 50%-Quantil",
+       subtitle = "Gemeinden des Kantons Zürich") +
+  theme_minimal() +
+  theme(
+    axis.text = element_blank(),
+    axis.ticks = element_blank(),
+    panel.grid = element_blank(),
+    legend.position = "right"
+  )
+
+# Create map with 75 Percent Quantil 
+ggplot() + 
+  geom_sf(data = municipality_q75, aes(fill=INDIKATOR_VALUE), color = "#FFFFFF", size = 0.2) +
+  scale_fill_viridis_c(name = "Value", option = "mako") +
+  labs(title = "Steuerbares Einkommen der natürlichen Personen - 75%-Quantil",
+       subtitle = "Gemeinden des Kantons Zürich") +
+  theme_minimal() +
+  theme(
+    axis.text = element_blank(),
+    axis.ticks = element_blank(),
+    panel.grid = element_blank(),
+    legend.position = "right"
+  )
+```
