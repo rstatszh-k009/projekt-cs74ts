@@ -1,4 +1,4 @@
-variable_name;beschreibung
+variable_name,beschreibung
 BFS_NR;BFS Gemeindenummer 
 GEBIET_NAME;Name der Gemeinde
 THEMA_NAME;Thematische Zuordnung des Thema 
