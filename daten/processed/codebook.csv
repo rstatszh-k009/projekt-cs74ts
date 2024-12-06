@@ -1,12 +1,12 @@
 variable_name,beschreibung
-BFS_NR;BFS Gemeindenummer 
-GEBIET_NAME;Name der Gemeinde
-THEMA_NAME;Thematische Zuordnung des Thema 
-SET_NAME;Name der Themengruppe
-SUBSET_NAME ;Name der Themenuntergruppe 
-INDIKATOR_ID;Nummer des Indikators
-INDIKATOR_NAME;Name des Indikators 
-INDIKATOR_JAHR;Jahr des Indikators 
-INDIKATOR_VALUE;Wert steuerbares Einkommen 
-EINHEIT_KURZ;Abkuerzung Einheit des Indikators
-EINHEIT_LANG;Einheit des Indikators 
+BFS_NR,BFS Gemeindenummer 
+GEBIET_NAME,Name der Gemeinde
+THEMA_NAME,Thematische Zuordnung des Thema 
+SET_NAME,Name der Themengruppe
+SUBSET_NAME,Name der Themenuntergruppe 
+INDIKATOR_ID,Nummer des Indikators
+INDIKATOR_NAME,Name des Indikators 
+INDIKATOR_JAHR,Jahr des Indikators 
+INDIKATOR_VALUE,Wert steuerbares Einkommen 
+EINHEIT_KURZ,Abkuerzung Einheit des Indikators
+EINHEIT_LANG,Einheit des Indikators 
