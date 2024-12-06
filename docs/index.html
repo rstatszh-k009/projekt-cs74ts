@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="de" xml:lang="de"><head>
 
 <meta charset="utf-8">
 <meta name="generator" content="quarto-1.5.57">
@@ -8,7 +8,7 @@
 
 <meta name="author" content="cs74ts">
 
-<title>index.qmd</title>
+<title>Regionale Einkommensunterschiede im Kanton Zürich</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -72,15 +72,31 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 </head>
 
-<body class="fullcontent">
+<body>
 
 <div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
-
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+  <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Inhaltsverzeichnis</h2>
+   
+  <ul>
+  <li><a href="#einleitung" id="toc-einleitung" class="nav-link active" data-scroll-target="#einleitung">Einleitung</a></li>
+  <li><a href="#daten" id="toc-daten" class="nav-link" data-scroll-target="#daten">Daten</a>
+  <ul class="collapse">
+  <li><a href="#laden-der-pakete" id="toc-laden-der-pakete" class="nav-link" data-scroll-target="#laden-der-pakete">Laden der Pakete</a></li>
+  <li><a href="#einlesen-der-daten" id="toc-einlesen-der-daten" class="nav-link" data-scroll-target="#einlesen-der-daten">Einlesen der Daten</a></li>
+  <li><a href="#aufbereitung-der-daten-für-analyse" id="toc-aufbereitung-der-daten-für-analyse" class="nav-link" data-scroll-target="#aufbereitung-der-daten-für-analyse">Aufbereitung der Daten für Analyse</a></li>
+  </ul></li>
+  <li><a href="#ergebnisse" id="toc-ergebnisse" class="nav-link" data-scroll-target="#ergebnisse">Ergebnisse</a></li>
+  <li><a href="#schlussfolgerungen" id="toc-schlussfolgerungen" class="nav-link" data-scroll-target="#schlussfolgerungen">Schlussfolgerungen</a></li>
+  </ul>
+</nav>
+</div>
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">index.qmd</h1>
+<h1 class="title">Regionale Einkommensunterschiede im Kanton Zürich</h1>
 </div>
 
 
@@ -88,12 +104,18 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="quarto-title-meta">
 
     <div>
-    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-heading">Autor:in</div>
     <div class="quarto-title-meta-contents">
              <p>cs74ts </p>
           </div>
   </div>
     
+    <div>
+    <div class="quarto-title-meta-heading">Veröffentlichungsdatum</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">6. Dezember 2024</p>
+    </div>
+  </div>
   
     
   </div>
@@ -103,344 +125,714 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
-✔ dplyr     1.1.4     ✔ readr     2.1.5
-✔ forcats   1.0.0     ✔ stringr   1.5.1
-✔ ggplot2   3.5.1     ✔ tibble    3.2.1
-✔ lubridate 1.9.3     ✔ tidyr     1.3.1
-✔ purrr     1.0.2     
-── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
-✖ dplyr::filter() masks stats::filter()
-✖ dplyr::lag()    masks stats::lag()
-ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sf)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Linking to GEOS 3.8.0, GDAL 3.0.4, PROJ 6.3.1; sf_use_s2() is TRUE</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
 <section id="einleitung" class="level1">
 <h1>Einleitung</h1>
-<p>Im Rahmen dieser Arbeit sollen die regionalen Unterschiede im Einkommens natürlicher Personen im Kanton Zürich betrachtet werden. wird das steuerbare Einkommen natürlicher Personen im Kanton Zürich betrachtet. Plotte 25 / 25 / 75 - Quantile des Steuerbaren Einkommens von natürlichen Personen auf Gemeindekarte der Zürcher Gemeinden.</p>
-<section id="daten" class="level2">
-<h2 class="anchored" data-anchor-id="daten">Daten</h2>
-<p>Die verwendeten Daten umfassen zum einen das 25%-Quantil <a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> / das 50%-Prozent <a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> und das 75%-Quantil<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a> des steuerbaren Einkommens natürlicher Personen in den Gemeinden des Kantons Zürich. Diese Daten werden vom Kanton Zürich als OGD-Daten bereit gestellt. Um diese Einkommensinformationen kartographisch darzustellen wird darüber hinaus ein Shapefile, welches Gemeindegrenzen Zürcher Gemeinden verwendet. Stand 26.01.2024.</p>
+<p>Im Rahmen dieser Arbeit sollen die regionalen Unterschiede im Einkommen von natürlichen Personen innerhalb des Kantons Zürich betrachtet werden und etwaige regionale Muster anhand von Karten visuell sichtbar gemacht werden. Die Höhe des Einkommens von natürlichen Personen ist ein Indikator für die Attraktivität einer Gemeinde und kann bis zu einem gewissen Grad auch die finanziellen Möglichkeiten einer Gemeinde widerspiegeln. Im Rahmen des Berichts wird das steuerbare Einkommen<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> steuerpflichtiger natürlicher Personen aus der Bundessteuerstatistik betrachtet.</p>
 </section>
-<section id="analyseziele" class="level2">
-<h2 class="anchored" data-anchor-id="analyseziele">Analyseziele</h2>
-</section>
-</section>
-<section id="daten-aufbereitung" class="level1">
-<h1>Daten Aufbereitung</h1>
-<section id="einlesen-der-daten" class="level2">
-<h2 class="anchored" data-anchor-id="einlesen-der-daten">Einlesen der Daten</h2>
+<section id="daten" class="level1">
+<h1>Daten</h1>
+<p>Die verwendeten Daten umfassen zum einen das 25%-Quantil <a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> / das 50%-Quantil (Median) <a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a> und das 75%-Quantil<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a> des steuerbaren Einkommens natürlicher Personen in den Gemeinden des Kantons Zürich. Diese Daten werden vom Statistischem Amt des Kantons Zürich als Open Government Data (OGD) bereit gestellt. Die sogenannten Quantile sind Schwellenwerte: So liegen ein Viertel der steuerbaren Einkommen unter dem 25%-Quantil, die anderen drei Viertel über dem 25%-Quantil. Korrespondierend liegt die Hälfte der steuerbaren Einkommen unter dem 50%-Quantil, die anderen Hälfte über dem 50%-Quantil. Um diese Einkommens-Informationen anhand einer Karte abzubilden, wird des Weiteren ein Shapefile, welches die Gemeindegrenzen der Zürcher Gemeinden beinhaltet, verwendet.<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a></p>
+<section id="laden-der-pakete" class="level3">
+<h3 class="anchored" data-anchor-id="laden-der-pakete">Laden der Pakete</h3>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Read in data </span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>data_q25 <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"/cloud/project/daten/raw/KANTON_ZUERICH_315.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>New names:
-Rows: 4499 Columns: 12
-── Column specification
-──────────────────────────────────────────────────────── Delimiter: "," chr
-(7): GEBIET_NAME, THEMA_NAME, SET_NAME, SUBSET_NAME, INDIKATOR_NAME, EIN... dbl
-(4): BFS_NR, INDIKATOR_ID, INDIKATOR_JAHR, INDIKATOR_VALUE lgl (1): ...12
-ℹ Use `spec()` to retrieve the full column specification for this data. ℹ
-Specify the column types or set `show_col_types = FALSE` to quiet this message.
-• `` -&gt; `...12`</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>data_q50 <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"/cloud/project/daten/raw/KANTON_ZUERICH_316.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>New names:
-Rows: 4499 Columns: 12
-── Column specification
-──────────────────────────────────────────────────────── Delimiter: "," chr
-(7): GEBIET_NAME, THEMA_NAME, SET_NAME, SUBSET_NAME, INDIKATOR_NAME, EIN... dbl
-(4): BFS_NR, INDIKATOR_ID, INDIKATOR_JAHR, INDIKATOR_VALUE lgl (1): ...12
-ℹ Use `spec()` to retrieve the full column specification for this data. ℹ
-Specify the column types or set `show_col_types = FALSE` to quiet this message.
-• `` -&gt; `...12`</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>data_q75 <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"/cloud/project/daten/raw/KANTON_ZUERICH_318.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>New names:
-Rows: 4499 Columns: 12
-── Column specification
-──────────────────────────────────────────────────────── Delimiter: "," chr
-(7): GEBIET_NAME, THEMA_NAME, SET_NAME, SUBSET_NAME, INDIKATOR_NAME, EIN... dbl
-(4): BFS_NR, INDIKATOR_ID, INDIKATOR_JAHR, INDIKATOR_VALUE lgl (1): ...12
-ℹ Use `spec()` to retrieve the full column specification for this data. ℹ
-Specify the column types or set `show_col_types = FALSE` to quiet this message.
-• `` -&gt; `...12`</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Geodaten Gemeinden Kanton Zürich - Stand 26.01.2024</span></span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>municipality_prod_geo <span class="ot">&lt;-</span> <span class="fu">read_sf</span>(<span class="st">"/cloud/project/daten/raw/UP_GEMEINDEN_F.shp"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sf)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggthemes)</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="aufbereitung-der-daten-für-analyse" class="level2">
-<h2 class="anchored" data-anchor-id="aufbereitung-der-daten-für-analyse">Aufbereitung der Daten für Analyse</h2>
+<section id="einlesen-der-daten" class="level3">
+<h3 class="anchored" data-anchor-id="einlesen-der-daten">Einlesen der Daten</h3>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Check latest year for which information is available </span></span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(data_q25) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>Rows: 4,499
-Columns: 12
-$ BFS_NR          &lt;dbl&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, …
-$ GEBIET_NAME     &lt;chr&gt; "Aeugst a.A.", "Aeugst a.A.", "Aeugst a.A.", "Aeugst a…
-$ THEMA_NAME      &lt;chr&gt; "Bevölkerung und Soziales", "Bevölkerung und Soziales"…
-$ SET_NAME        &lt;chr&gt; "Einkommen und Vermögen", "Einkommen und Vermögen", "E…
-$ SUBSET_NAME     &lt;chr&gt; "Steuerbares Einkommen", "Steuerbares Einkommen", "Ste…
-$ INDIKATOR_ID    &lt;dbl&gt; 315, 315, 315, 315, 315, 315, 315, 315, 315, 315, 315,…
-$ INDIKATOR_NAME  &lt;chr&gt; "Steuerb. Einkommen natürl. Pers. 25%-Quantil [Fr.]", …
-$ INDIKATOR_JAHR  &lt;dbl&gt; 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, …
-$ INDIKATOR_VALUE &lt;dbl&gt; 20800, 21700, 23600, 25600, 25900, 28100, 27400, 31100…
-$ EINHEIT_KURZ    &lt;chr&gt; "Fr.", "Fr.", "Fr.", "Fr.", "Fr.", "Fr.", "Fr.", "Fr."…
-$ EINHEIT_LANG    &lt;chr&gt; "Franken", "Franken", "Franken", "Franken", "Franken",…
-$ ...12           &lt;lgl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA…</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>data_q25 <span class="sc">|&gt;</span> <span class="fu">count</span>(INDIKATOR_JAHR) <span class="sc">|&gt;</span> <span class="fu">print</span>(<span class="at">n =</span> <span class="cn">Inf</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 23 × 2
-   INDIKATOR_JAHR     n
-            &lt;dbl&gt; &lt;int&gt;
- 1           1999   197
- 2           2000   197
- 3           2001   197
- 4           2002   197
- 5           2003   197
- 6           2004   197
- 7           2005   197
- 8           2006   197
- 9           2007   197
-10           2008   197
-11           2009   197
-12           2010   197
-13           2011   197
-14           2012   197
-15           2013   197
-16           2014   197
-17           2015   199
-18           2016   197
-19           2017   197
-20           2018   193
-21           2019   187
-22           2020   187
-23           2021   187</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(data_q50) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>Rows: 4,499
-Columns: 12
-$ BFS_NR          &lt;dbl&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, …
-$ GEBIET_NAME     &lt;chr&gt; "Aeugst a.A.", "Aeugst a.A.", "Aeugst a.A.", "Aeugst a…
-$ THEMA_NAME      &lt;chr&gt; "Bevölkerung und Soziales", "Bevölkerung und Soziales"…
-$ SET_NAME        &lt;chr&gt; "Einkommen und Vermögen", "Einkommen und Vermögen", "E…
-$ SUBSET_NAME     &lt;chr&gt; "Steuerbares Einkommen", "Steuerbares Einkommen", "Ste…
-$ INDIKATOR_ID    &lt;dbl&gt; 316, 316, 316, 316, 316, 316, 316, 316, 316, 316, 316,…
-$ INDIKATOR_NAME  &lt;chr&gt; "Steuerb. Einkommen natürl. Pers. Median [Fr.]", "Steu…
-$ INDIKATOR_JAHR  &lt;dbl&gt; 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, …
-$ INDIKATOR_VALUE &lt;dbl&gt; 47700, 50000, 53100, 54300, 52100, 54300, 56600, 58200…
-$ EINHEIT_KURZ    &lt;chr&gt; "Fr.", "Fr.", "Fr.", "Fr.", "Fr.", "Fr.", "Fr.", "Fr."…
-$ EINHEIT_LANG    &lt;chr&gt; "Franken", "Franken", "Franken", "Franken", "Franken",…
-$ ...12           &lt;lgl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA…</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>data_q50 <span class="sc">|&gt;</span> <span class="fu">count</span>(INDIKATOR_JAHR) <span class="sc">|&gt;</span> <span class="fu">print</span>(<span class="at">n =</span> <span class="cn">Inf</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 23 × 2
-   INDIKATOR_JAHR     n
-            &lt;dbl&gt; &lt;int&gt;
- 1           1999   197
- 2           2000   197
- 3           2001   197
- 4           2002   197
- 5           2003   197
- 6           2004   197
- 7           2005   197
- 8           2006   197
- 9           2007   197
-10           2008   197
-11           2009   197
-12           2010   197
-13           2011   197
-14           2012   197
-15           2013   197
-16           2014   197
-17           2015   199
-18           2016   197
-19           2017   197
-20           2018   193
-21           2019   187
-22           2020   187
-23           2021   187</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(data_q75) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>Rows: 4,499
-Columns: 12
-$ BFS_NR          &lt;dbl&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, …
-$ GEBIET_NAME     &lt;chr&gt; "Aeugst a.A.", "Aeugst a.A.", "Aeugst a.A.", "Aeugst a…
-$ THEMA_NAME      &lt;chr&gt; "Bevölkerung und Soziales", "Bevölkerung und Soziales"…
-$ SET_NAME        &lt;chr&gt; "Einkommen und Vermögen", "Einkommen und Vermögen", "E…
-$ SUBSET_NAME     &lt;chr&gt; "Steuerbares Einkommen", "Steuerbares Einkommen", "Ste…
-$ INDIKATOR_ID    &lt;dbl&gt; 318, 318, 318, 318, 318, 318, 318, 318, 318, 318, 318,…
-$ INDIKATOR_NAME  &lt;chr&gt; "Steuerb. Einkommen natürl. Pers. 75%-Quantil [Fr.]", …
-$ INDIKATOR_JAHR  &lt;dbl&gt; 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, …
-$ INDIKATOR_VALUE &lt;dbl&gt; 77900, 85100, 88800, 90500, 88100, 92200, 94300, 96200…
-$ EINHEIT_KURZ    &lt;chr&gt; "Fr.", "Fr.", "Fr.", "Fr.", "Fr.", "Fr.", "Fr.", "Fr."…
-$ EINHEIT_LANG    &lt;chr&gt; "Franken", "Franken", "Franken", "Franken", "Franken",…
-$ ...12           &lt;lgl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA…</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>data_q75 <span class="sc">|&gt;</span> <span class="fu">count</span>(INDIKATOR_JAHR) <span class="sc">|&gt;</span> <span class="fu">print</span>(<span class="at">n =</span> <span class="cn">Inf</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 23 × 2
-   INDIKATOR_JAHR     n
-            &lt;dbl&gt; &lt;int&gt;
- 1           1999   197
- 2           2000   197
- 3           2001   197
- 4           2002   197
- 5           2003   197
- 6           2004   197
- 7           2005   197
- 8           2006   197
- 9           2007   197
-10           2008   197
-11           2009   197
-12           2010   197
-13           2011   197
-14           2012   197
-15           2013   197
-16           2014   197
-17           2015   199
-18           2016   197
-19           2017   197
-20           2018   193
-21           2019   187
-22           2020   187
-23           2021   187</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(municipality_prod_geo)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>Rows: 165
-Columns: 10
-$ BFS        &lt;int&gt; 0, 5, 22, 34, 52, 58, 62, 68, 95, 111, 120, 121, 152, 159, …
-$ ARPS       &lt;int&gt; 0, 17, 120, 131, 51, 149, 55, 163, 162, 71, 89, 90, 41, 48,…
-$ BEZIRKSNAM &lt;chr&gt; NA, "Affoltern", "Andelfingen", "Andelfingen", "Bülach", "B…
-$ ART_TEXT   &lt;chr&gt; "zu keiner Gemeinde gehörende Seefläche", "Gemeinde", "Geme…
-$ GEMEINDENA &lt;chr&gt; NA, "Hedingen", "Benken (ZH)", "Laufen-Uhwiesen", "Bassersd…
-$ ART_CODE   &lt;int&gt; 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,…
-$ AREA_ROUND &lt;dbl&gt; 8282649, 6529347, 5656950, 6281810, 9026382, 12293226, 1917…
-$ SHAPE_AREA &lt;dbl&gt; 8282649, 6529347, 5656950, 6281810, 9026382, 11897108, 1917…
-$ SHAPE_LEN  &lt;dbl&gt; 17289.755, 13764.079, 13682.732, 18498.544, 17870.981, 2116…
-$ geometry   &lt;POLYGON [m]&gt; POLYGON ((2692552 1247618, ..., POLYGON ((2675815 1…</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="do">## filter out latest year for all three data sets </span></span>
-<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>data_q25_2018 <span class="ot">&lt;-</span> data_q25 <span class="sc">|&gt;</span> <span class="fu">filter</span>(INDIKATOR_JAHR <span class="sc">==</span> <span class="dv">2018</span>)</span>
-<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>data_q25_2018 <span class="ot">&lt;-</span> data_q25_2018 <span class="sc">|&gt;</span> <span class="fu">filter</span>(BFS_NR <span class="sc">&gt;</span> <span class="dv">0</span>)</span>
-<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>data_q50_2018 <span class="ot">&lt;-</span> data_q50 <span class="sc">|&gt;</span> <span class="fu">filter</span>(INDIKATOR_JAHR <span class="sc">==</span> <span class="dv">2018</span>)</span>
-<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>data_q50_2018 <span class="ot">&lt;-</span> data_q50_2018 <span class="sc">|&gt;</span> <span class="fu">filter</span>(BFS_NR <span class="sc">&gt;</span> <span class="dv">0</span>)</span>
-<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a>data_q75_2018 <span class="ot">&lt;-</span> data_q75 <span class="sc">|&gt;</span> <span class="fu">filter</span>(INDIKATOR_JAHR <span class="sc">==</span> <span class="dv">2018</span>)</span>
-<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a>data_q75_2018 <span class="ot">&lt;-</span> data_q75_2018 <span class="sc">|&gt;</span> <span class="fu">filter</span>(BFS_NR <span class="sc">&gt;</span> <span class="dv">0</span>)</span>
-<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-11"><a href="#cb27-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Change identifier to character for merge </span></span>
-<span id="cb27-12"><a href="#cb27-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Q25 </span></span>
-<span id="cb27-13"><a href="#cb27-13" aria-hidden="true" tabindex="-1"></a>data_q25_2018<span class="sc">$</span>BFS_N <span class="ot">&lt;-</span> <span class="fu">as.character</span>(data_q25_2018<span class="sc">$</span>BFS_NR)</span>
-<span id="cb27-14"><a href="#cb27-14" aria-hidden="true" tabindex="-1"></a>municipality_prod_geo<span class="sc">$</span>BFS_N <span class="ot">&lt;-</span> <span class="fu">as.character</span>(municipality_prod_geo<span class="sc">$</span>BFS)</span>
-<span id="cb27-15"><a href="#cb27-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-16"><a href="#cb27-16" aria-hidden="true" tabindex="-1"></a><span class="co">#Q50</span></span>
-<span id="cb27-17"><a href="#cb27-17" aria-hidden="true" tabindex="-1"></a>data_q50_2018<span class="sc">$</span>BFS_N <span class="ot">&lt;-</span> <span class="fu">as.character</span>(data_q50_2018<span class="sc">$</span>BFS_NR)</span>
-<span id="cb27-18"><a href="#cb27-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-19"><a href="#cb27-19" aria-hidden="true" tabindex="-1"></a><span class="co">#Q75</span></span>
-<span id="cb27-20"><a href="#cb27-20" aria-hidden="true" tabindex="-1"></a>data_q75_2018<span class="sc">$</span>BFS_N <span class="ot">&lt;-</span> <span class="fu">as.character</span>(data_q75_2018<span class="sc">$</span>BFS_NR)</span>
-<span id="cb27-21"><a href="#cb27-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-22"><a href="#cb27-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-23"><a href="#cb27-23" aria-hidden="true" tabindex="-1"></a><span class="do">## join data sets with shapefile </span></span>
-<span id="cb27-24"><a href="#cb27-24" aria-hidden="true" tabindex="-1"></a>municipality_q25 <span class="ot">&lt;-</span> <span class="fu">left_join</span>(municipality_prod_geo, data_q25_2018, <span class="at">by =</span> <span class="st">"BFS_N"</span>)</span>
-<span id="cb27-25"><a href="#cb27-25" aria-hidden="true" tabindex="-1"></a>municipality_q50 <span class="ot">&lt;-</span> <span class="fu">left_join</span>(municipality_prod_geo, data_q50_2018, <span class="at">by =</span> <span class="st">"BFS_N"</span>)</span>
-<span id="cb27-26"><a href="#cb27-26" aria-hidden="true" tabindex="-1"></a>municipality_q75 <span class="ot">&lt;-</span> <span class="fu">left_join</span>(municipality_prod_geo, data_q75_2018, <span class="at">by =</span> <span class="st">"BFS_N"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Datensätze mit Einkommensinformationen</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>data_q25 <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"daten/raw/KANTON_ZUERICH_315.csv"</span>))</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>data_q50 <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"daten/raw/KANTON_ZUERICH_316.csv"</span>))</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>data_q75 <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"daten/raw/KANTON_ZUERICH_318.csv"</span>))</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Geodaten Gemeinden Kanton Zürich - Stand 26.01.2024</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>municipality_prod_geo <span class="ot">&lt;-</span> <span class="fu">read_sf</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"daten/raw/UP_GEMEINDEN_F.shp"</span>))</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-</section>
-<section id="daten-visualisierung" class="level1">
-<h1>Daten Visualisierung</h1>
+<section id="aufbereitung-der-daten-für-analyse" class="level3">
+<h3 class="anchored" data-anchor-id="aufbereitung-der-daten-für-analyse">Aufbereitung der Daten für Analyse</h3>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="do">## create maps </span></span>
-<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Create map with 25 Percent Quantil </span></span>
-<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span> </span>
-<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> municipality_q25, <span class="fu">aes</span>(<span class="at">fill=</span>INDIKATOR_VALUE), <span class="at">color =</span> <span class="st">"#FFFFFF"</span>, <span class="at">size =</span> <span class="fl">0.2</span>) <span class="sc">+</span></span>
-<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_viridis_c</span>(<span class="at">name =</span> <span class="st">"Value"</span>, <span class="at">option =</span> <span class="st">"mako"</span>) <span class="sc">+</span></span>
-<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Steuerbares Einkommen der natürlichen Personen - 25%-Quantil"</span>,</span>
-<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="st">"Gemeinden des Kantons Zürich"</span>) <span class="sc">+</span></span>
-<span id="cb28-9"><a href="#cb28-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
-<span id="cb28-10"><a href="#cb28-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
-<span id="cb28-11"><a href="#cb28-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.text =</span> <span class="fu">element_blank</span>(),</span>
-<span id="cb28-12"><a href="#cb28-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.ticks =</span> <span class="fu">element_blank</span>(),</span>
-<span id="cb28-13"><a href="#cb28-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">panel.grid =</span> <span class="fu">element_blank</span>(),</span>
-<span id="cb28-14"><a href="#cb28-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">legend.position =</span> <span class="st">"right"</span></span>
-<span id="cb28-15"><a href="#cb28-15" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Extrahiere aktuellstes Jahr, für welches Daten verfügbar sind </span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>max_year_q25 <span class="ot">&lt;-</span> <span class="fu">max</span>(data_q25<span class="sc">$</span>INDIKATOR_JAHR)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>max_year_q50 <span class="ot">&lt;-</span> <span class="fu">max</span>(data_q50<span class="sc">$</span>INDIKATOR_JAHR)</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>max_year_q75 <span class="ot">&lt;-</span> <span class="fu">max</span>(data_q75<span class="sc">$</span>INDIKATOR_JAHR)</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Filtere das aktuellste Jahr (2021) und Gemeinden (BFS_NR &gt; 0) für alle drei Datensätze heraus</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>data_q25_2021 <span class="ot">&lt;-</span> data_q25 <span class="sc">|&gt;</span> <span class="fu">filter</span>(INDIKATOR_JAHR <span class="sc">==</span> max_year_q25)</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>data_q25_2021 <span class="ot">&lt;-</span> data_q25_2021 <span class="sc">|&gt;</span> <span class="fu">filter</span>(BFS_NR <span class="sc">&gt;</span> <span class="dv">0</span>)</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>data_q50_2021 <span class="ot">&lt;-</span> data_q50 <span class="sc">|&gt;</span> <span class="fu">filter</span>(INDIKATOR_JAHR <span class="sc">==</span> max_year_q50)</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>data_q50_2021 <span class="ot">&lt;-</span> data_q50_2021 <span class="sc">|&gt;</span> <span class="fu">filter</span>(BFS_NR <span class="sc">&gt;</span> <span class="dv">0</span>)</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>data_q75_2021 <span class="ot">&lt;-</span> data_q75 <span class="sc">|&gt;</span> <span class="fu">filter</span>(INDIKATOR_JAHR <span class="sc">==</span> max_year_q75)</span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>data_q75_2021 <span class="ot">&lt;-</span> data_q75_2021 <span class="sc">|&gt;</span> <span class="fu">filter</span>(BFS_NR <span class="sc">&gt;</span> <span class="dv">0</span>)</span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Ändere Identifier zu Character-Format um Steuerdatensätze mit Shapefile zu verknüpfen</span></span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a><span class="co">#Q25-dataframe </span></span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>data_q25_2021<span class="sc">$</span>BFS_N <span class="ot">&lt;-</span> <span class="fu">as.character</span>(data_q25_2021<span class="sc">$</span>BFS_NR)</span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a><span class="co">#Q50-dataframe </span></span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>data_q50_2021<span class="sc">$</span>BFS_N <span class="ot">&lt;-</span> <span class="fu">as.character</span>(data_q50_2021<span class="sc">$</span>BFS_NR)</span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a><span class="co">#Q75-dataframe </span></span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a>data_q75_2021<span class="sc">$</span>BFS_N <span class="ot">&lt;-</span> <span class="fu">as.character</span>(data_q75_2021<span class="sc">$</span>BFS_NR)</span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a><span class="co"># Shapefile</span></span>
+<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a>municipality_prod_geo<span class="sc">$</span>BFS_N <span class="ot">&lt;-</span> <span class="fu">as.character</span>(municipality_prod_geo<span class="sc">$</span>BFS)</span>
+<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a><span class="co"># Zusammenfügen der Datensätze</span></span>
+<span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a>municipality_q25 <span class="ot">&lt;-</span> <span class="fu">left_join</span>(municipality_prod_geo, data_q25_2021, <span class="at">by =</span> <span class="st">"BFS_N"</span>)</span>
+<span id="cb3-35"><a href="#cb3-35" aria-hidden="true" tabindex="-1"></a>municipality_q50 <span class="ot">&lt;-</span> <span class="fu">left_join</span>(municipality_prod_geo, data_q50_2021, <span class="at">by =</span> <span class="st">"BFS_N"</span>)</span>
+<span id="cb3-36"><a href="#cb3-36" aria-hidden="true" tabindex="-1"></a>municipality_q75 <span class="ot">&lt;-</span> <span class="fu">left_join</span>(municipality_prod_geo, data_q75_2021, <span class="at">by =</span> <span class="st">"BFS_N"</span>)</span>
+<span id="cb3-37"><a href="#cb3-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-38"><a href="#cb3-38" aria-hidden="true" tabindex="-1"></a><span class="co"># Speichern der fertigen Datensätze: </span></span>
+<span id="cb3-39"><a href="#cb3-39" aria-hidden="true" tabindex="-1"></a><span class="fu">write_csv</span>(<span class="at">x=</span> data_q75_2021, </span>
+<span id="cb3-40"><a href="#cb3-40" aria-hidden="true" tabindex="-1"></a>          here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"daten/processed/ktzh_steuerb_einkommen_q75_2021.csv"</span>))</span>
+<span id="cb3-41"><a href="#cb3-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-42"><a href="#cb3-42" aria-hidden="true" tabindex="-1"></a><span class="fu">write_csv</span>(<span class="at">x =</span> data_q50_2021, </span>
+<span id="cb3-43"><a href="#cb3-43" aria-hidden="true" tabindex="-1"></a>          here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"daten/processed/ktzh_steuerb_einkommen_q50_2021.csv"</span>))</span>
+<span id="cb3-44"><a href="#cb3-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-45"><a href="#cb3-45" aria-hidden="true" tabindex="-1"></a><span class="fu">write_csv</span>(data_q25_2021, </span>
+<span id="cb3-46"><a href="#cb3-46" aria-hidden="true" tabindex="-1"></a>          here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"daten/processed/ktzh_steuerb_einkommen_q25_2021.csv"</span>))</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+</section>
+<section id="ergebnisse" class="level1">
+<h1>Ergebnisse</h1>
+<p>In <a href="#tbl-q50" class="quarto-xref">Tabelle&nbsp;1</a> sind zusammenfassende Statistiken für das Medianeinkommen abgebildet. Die Gemeinde Wald weist das niedrigste Medianeinkommen auf (46’000 Franken). Das höchste steuerbare Medianeinkommen aller Zürcher Gemeinden weist die Gemeinde Uitikon mit 87’900 Franken auf.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Erstellung Tabelle mit zusammenfassenden Statistiken</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>data_q50_2021 <span class="sc">|&gt;</span> </span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarise</span>(<span class="at">n =</span> <span class="fu">n</span>(),</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>            <span class="at">mean_q50_2021 =</span> <span class="fu">mean</span>(INDIKATOR_VALUE),</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>            <span class="at">min_q50_2021 =</span> <span class="fu">min</span>(INDIKATOR_VALUE),</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>            <span class="at">max_q50_2021 =</span> <span class="fu">max</span>(INDIKATOR_VALUE)) <span class="sc">|&gt;</span>  </span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>  gt<span class="sc">::</span><span class="fu">gt</span>() <span class="sc">|&gt;</span>  </span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>    gt<span class="sc">::</span><span class="fu">cols_label</span>(</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">n =</span> <span class="st">"N"</span>,</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">mean_q50_2021 =</span> <span class="st">"Durchschnitt"</span>,</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">min_q50_2021 =</span> <span class="st">"Minimum"</span>,</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">max_q50_2021 =</span> <span class="st">"Maximum"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>  gt<span class="sc">::</span><span class="fu">tab_footnote</span>(<span class="st">"N = Anzahl Beobachtungen. Quelle Daten: Statistisches Amt des Kantons Zürich"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>  gt<span class="sc">::</span><span class="fu">fmt_currency</span>(</span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>  <span class="at">columns =</span> <span class="fu">c</span>(mean_q50_2021, min_q50_2021, max_q50_2021),</span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>  <span class="at">currency =</span> <span class="st">"CHF"</span>,</span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">decimals =</span> <span class="dv">0</span>,</span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">use_seps =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">sep_mark =</span> <span class="st">"'"</span>,</span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">dec_mark =</span> <span class="st">"."</span>,</span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>    <span class="at">placement =</span> <span class="st">"left"</span>,</span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a>    <span class="at">incl_space =</span> <span class="cn">TRUE</span></span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a><span class="co"># Gemeinden mit niedrigsten / höchsten Werte </span></span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a>min_row_50 <span class="ot">&lt;-</span> data_q50_2021  <span class="sc">|&gt;</span>  <span class="fu">slice_min</span>(INDIKATOR_VALUE, <span class="at">n =</span> <span class="dv">1</span>)</span>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a>max_row_50 <span class="ot">&lt;-</span> data_q50_2021  <span class="sc">|&gt;</span>  <span class="fu">slice_max</span>(INDIKATOR_VALUE, <span class="at">n =</span> <span class="dv">1</span>)</span>
+<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a>min_row_75 <span class="ot">&lt;-</span> data_q75_2021  <span class="sc">|&gt;</span>  <span class="fu">slice_min</span>(INDIKATOR_VALUE, <span class="at">n =</span> <span class="dv">1</span>)</span>
+<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a>max_row_75 <span class="ot">&lt;-</span> data_q75_2021  <span class="sc">|&gt;</span>  <span class="fu">slice_max</span>(INDIKATOR_VALUE, <span class="at">n =</span> <span class="dv">1</span>)</span>
+<span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a>min_row_25 <span class="ot">&lt;-</span> data_q25_2021  <span class="sc">|&gt;</span>  <span class="fu">slice_min</span>(INDIKATOR_VALUE, <span class="at">n =</span> <span class="dv">1</span>)</span>
+<span id="cb4-32"><a href="#cb4-32" aria-hidden="true" tabindex="-1"></a>max_row_25 <span class="ot">&lt;-</span> data_q25_2021  <span class="sc">|&gt;</span>  <span class="fu">slice_max</span>(INDIKATOR_VALUE, <span class="at">n =</span> <span class="dv">1</span>)</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="tbl-q50" class="cell quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-q50-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Tabelle&nbsp;1: Zusammenfassende Statistiken: Medianeinkommen Gemeinden des Kantons Zürich
+</figcaption>
+<div aria-describedby="tbl-q50-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid figure-img" width="672"></p>
+<div id="hbbewuwsrr" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#hbbewuwsrr table {
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#hbbewuwsrr thead, #hbbewuwsrr tbody, #hbbewuwsrr tfoot, #hbbewuwsrr tr, #hbbewuwsrr td, #hbbewuwsrr th {
+  border-style: none;
+}
+
+#hbbewuwsrr p {
+  margin: 0;
+  padding: 0;
+}
+
+#hbbewuwsrr .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#hbbewuwsrr .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#hbbewuwsrr .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#hbbewuwsrr .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#hbbewuwsrr .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#hbbewuwsrr .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#hbbewuwsrr .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#hbbewuwsrr .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#hbbewuwsrr .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#hbbewuwsrr .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#hbbewuwsrr .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#hbbewuwsrr .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#hbbewuwsrr .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#hbbewuwsrr .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#hbbewuwsrr .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#hbbewuwsrr .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#hbbewuwsrr .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#hbbewuwsrr .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#hbbewuwsrr .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#hbbewuwsrr .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#hbbewuwsrr .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#hbbewuwsrr .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#hbbewuwsrr .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#hbbewuwsrr .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#hbbewuwsrr .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#hbbewuwsrr .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#hbbewuwsrr .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#hbbewuwsrr .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#hbbewuwsrr .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+
+#hbbewuwsrr .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#hbbewuwsrr .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#hbbewuwsrr .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#hbbewuwsrr .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#hbbewuwsrr .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#hbbewuwsrr .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#hbbewuwsrr .gt_left {
+  text-align: left;
+}
+
+#hbbewuwsrr .gt_center {
+  text-align: center;
+}
+
+#hbbewuwsrr .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#hbbewuwsrr .gt_font_normal {
+  font-weight: normal;
+}
+
+#hbbewuwsrr .gt_font_bold {
+  font-weight: bold;
+}
+
+#hbbewuwsrr .gt_font_italic {
+  font-style: italic;
+}
+
+#hbbewuwsrr .gt_super {
+  font-size: 65%;
+}
+
+#hbbewuwsrr .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#hbbewuwsrr .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#hbbewuwsrr .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#hbbewuwsrr .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#hbbewuwsrr .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#hbbewuwsrr .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#hbbewuwsrr .gt_indent_5 {
+  text-indent: 25px;
+}
+
+#hbbewuwsrr .katex-display {
+  display: inline-flex !important;
+  margin-bottom: 0.75em !important;
+}
+
+#hbbewuwsrr div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+  height: 0px !important;
+}
+</style>
+
+<table class="gt_table do-not-create-environment cell caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+<thead>
+<tr class="header gt_col_headings">
+<th id="N" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">N</th>
+<th id="Durchschnitt" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Durchschnitt</th>
+<th id="Minimum" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Minimum</th>
+<th id="Maximum" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Maximum</th>
+</tr>
+</thead>
+<tbody class="gt_table_body">
+<tr class="odd">
+<td class="gt_row gt_right" headers="n">163</td>
+<td class="gt_row gt_right" headers="mean_q50_2021">SFr. 58'547</td>
+<td class="gt_row gt_right" headers="min_q50_2021">SFr. 46'000</td>
+<td class="gt_row gt_right" headers="max_q50_2021">SFr. 87'900</td>
+</tr>
+</tbody><tfoot class="gt_footnotes">
+<tr class="even">
+<td colspan="4" class="gt_footnote">N = Anzahl Beobachtungen. Quelle Daten: Statistisches Amt des Kantons Zürich</td>
+</tr>
+</tfoot>
+
+</table>
+
+</div>
+</div>
+</div>
 </figure>
 </div>
 </div>
-<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create map with 50 Percent Quantil </span></span>
-<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span> </span>
-<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> municipality_q50, <span class="fu">aes</span>(<span class="at">fill=</span>INDIKATOR_VALUE), <span class="at">color =</span> <span class="st">"#FFFFFF"</span>, <span class="at">size =</span> <span class="fl">0.2</span>) <span class="sc">+</span></span>
-<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_viridis_c</span>(<span class="at">name =</span> <span class="st">"Value"</span>, <span class="at">option =</span> <span class="st">"mako"</span>) <span class="sc">+</span></span>
-<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Steuerbares Einkommen der natürlichen Personen - 50%-Quantil"</span>,</span>
-<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="st">"Gemeinden des Kantons Zürich"</span>) <span class="sc">+</span></span>
-<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
-<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
-<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.text =</span> <span class="fu">element_blank</span>(),</span>
-<span id="cb29-10"><a href="#cb29-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.ticks =</span> <span class="fu">element_blank</span>(),</span>
-<span id="cb29-11"><a href="#cb29-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">panel.grid =</span> <span class="fu">element_blank</span>(),</span>
-<span id="cb29-12"><a href="#cb29-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">legend.position =</span> <span class="st">"right"</span></span>
-<span id="cb29-13"><a href="#cb29-13" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Um etwaige regionale Muster oder Cluster erkennen zu können, ist es oftmals hilfreich, die Daten mithilfe einer Karte darzustellen.</p>
+<p>In <a href="#fig-q50" class="quarto-xref">Abbildung&nbsp;1</a> ist das steuerbare Medianeinkommen der Zürcher Gemeinden dargestellt. Die Karte zeigt, dass neben der Gemeinde Uitikon (Nachbargemeinde der Stadt Zürich, in gelb), welche das höchste Medianeinkommen aufweist, insbesondere die Gemeinden am Ufer des Zürichsee mit Nähe zur Stadt Zürich sehr hohe Medianeinkommen aufweisen.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Erstellung Abbildung für Median </span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span> </span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> municipality_q50, <span class="fu">aes</span>(<span class="at">fill=</span>INDIKATOR_VALUE), <span class="at">color =</span> <span class="st">"#FFFFFF"</span>, <span class="at">size =</span> <span class="fl">0.2</span>) <span class="sc">+</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_viridis_c</span>(<span class="at">name =</span> <span class="st">"Einkommen in Fr."</span>, <span class="at">option =</span> <span class="st">"viridis"</span>) <span class="sc">+</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Steuerbares Medianeinkommen der natürlichen Personen"</span>,</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="st">"Gemeinden des Kantons Zürich"</span>) <span class="sc">+</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.text =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.ticks =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">panel.grid =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">legend.position =</span> <span class="st">"right"</span></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-3-2.png" class="img-fluid figure-img" width="672"></p>
-</figure>
+<div id="fig-q50" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-q50-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="index_files/figure-html/fig-q50-1.png" class="img-fluid figure-img" width="672">
 </div>
-</div>
-<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create map with 75 Percent Quantil </span></span>
-<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span> </span>
-<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> municipality_q75, <span class="fu">aes</span>(<span class="at">fill=</span>INDIKATOR_VALUE), <span class="at">color =</span> <span class="st">"#FFFFFF"</span>, <span class="at">size =</span> <span class="fl">0.2</span>) <span class="sc">+</span></span>
-<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_viridis_c</span>(<span class="at">name =</span> <span class="st">"Value"</span>, <span class="at">option =</span> <span class="st">"mako"</span>) <span class="sc">+</span></span>
-<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Steuerbares Einkommen der natürlichen Personen - 75%-Quantil"</span>,</span>
-<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="st">"Gemeinden des Kantons Zürich"</span>) <span class="sc">+</span></span>
-<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
-<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
-<span id="cb30-9"><a href="#cb30-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.text =</span> <span class="fu">element_blank</span>(),</span>
-<span id="cb30-10"><a href="#cb30-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.ticks =</span> <span class="fu">element_blank</span>(),</span>
-<span id="cb30-11"><a href="#cb30-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">panel.grid =</span> <span class="fu">element_blank</span>(),</span>
-<span id="cb30-12"><a href="#cb30-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">legend.position =</span> <span class="st">"right"</span></span>
-<span id="cb30-13"><a href="#cb30-13" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-3-3.png" class="img-fluid figure-img" width="672"></p>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-q50-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Abbildung&nbsp;1: Quelle Daten: Statistisches Amt des Kantons Zürich
+</figcaption>
 </figure>
 </div>
 </div>
 </div>
+<p>Ergänzend zum Medianeinkommmen sind in den zwei nachfolgenden Karten die Werte für das obere Quartil (75%-Quantil) sowie die Werte für das untere Quartil (25%-Quantil) der Zürcher Gemeinden dargestellt. Für das obere Quartil in <a href="#fig-q75" class="quarto-xref">Abbildung&nbsp;2</a> zeigt sich, dass wie beim Medianeinkommen die Anrainergemeinden des Zürichsees in direkter Nähe zur Stadt Zürich die höchsten Werte aufweisen.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Erstellung Abbildung für q75</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span> </span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> municipality_q75, <span class="fu">aes</span>(<span class="at">fill=</span>INDIKATOR_VALUE), <span class="at">color =</span> <span class="st">"#FFFFFF"</span>, <span class="at">size =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_viridis_c</span>(<span class="at">name =</span> <span class="st">"Einkommen in Fr."</span>, <span class="at">option =</span> <span class="st">"viridis"</span>) <span class="sc">+</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Steuerbares Einkommen der natürlichen Personen - 75%-Quantil"</span>,</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="st">"Gemeinden des Kantons Zürich"</span>) <span class="sc">+</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.text =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.ticks =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">panel.grid =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">legend.position =</span> <span class="st">"right"</span></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div id="fig-q75" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-q75-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="index_files/figure-html/fig-q75-1.png" class="img-fluid figure-img" width="672">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-q75-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Abbildung&nbsp;2: Quelle Daten: Statistisches Amt des Kantons Zürich
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>In <a href="#fig-q25" class="quarto-xref">Abbildung&nbsp;3</a> sind abschliessend die Werte für das untere Quartil des steuerbaren Einkommens dargestellt. Den niedrigsten Wert (24’100 Franken) weist hier wie beim Medianeinkommen die Gemeinde Wald auf. Den höchsten Wert für das untere Quartil weist die Gemeinde Hüttikon mit 44’600 Franken auf.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Erstellung Abbildung für q25</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span> </span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> municipality_q25, <span class="fu">aes</span>(<span class="at">fill=</span>INDIKATOR_VALUE), <span class="at">color =</span> <span class="st">"#FFFFFF"</span>, <span class="at">size =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_viridis_c</span>(<span class="at">name =</span> <span class="st">"Einkommen in Fr."</span>, <span class="at">option =</span> <span class="st">"viridis"</span>) <span class="sc">+</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Steuerbares Einkommen der natürlichen Personen - 25%-Quantil"</span>,</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="st">"Gemeinden des Kantons Zürich"</span>) <span class="sc">+</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.text =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.ticks =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">panel.grid =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">legend.position =</span> <span class="st">"right"</span></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div id="fig-q25" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-q25-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="index_files/figure-html/fig-q25-1.png" class="img-fluid figure-img" width="672">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-q25-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Abbildung&nbsp;3: Quelle Daten: Statistisches Amt des Kantons Zürich
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="schlussfolgerungen" class="level1">
+<h1>Schlussfolgerungen</h1>
+<ul>
+<li>Die Darstellung anhand von Karten ermöglicht den Betrachtenden eine einfache Erfassung von allfälligen räumlichen Mustern</li>
+<li>Nicht ganz überraschend zeigt sich, dass die Gemeinden am Ufer des Zürichsees in unmittelbarer Nähe zu Zürich vergleichsweise sehr hohe Medianeinkommen aufweisen</li>
+</ul>
 </section>
 
 
-<div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+<div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Fußnoten</h2>
 
 <ol>
-<li id="fn1"><p><a href="https://www.zh.ch/de/politik-staat/statistik-daten/datenkatalog.html#/datasets/245@statistisches-amt-kanton-zuerich">https://www.zh.ch/de/politik-staat/statistik-daten/datenkatalog.html#/datasets/245@statistisches-amt-kanton-zuerich</a><a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn2"><p><a href="https://www.zh.ch/de/politik-staat/statistik-daten/datenkatalog.html#/datasets/246@statistisches-amt-kanton-zuerich">https://www.zh.ch/de/politik-staat/statistik-daten/datenkatalog.html#/datasets/246@statistisches-amt-kanton-zuerich</a><a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn3"><p><a href="https://www.zh.ch/de/politik-staat/statistik-daten/datenkatalog.html#/datasets/249@statistisches-amt-kanton-zuerich">https://www.zh.ch/de/politik-staat/statistik-daten/datenkatalog.html#/datasets/249@statistisches-amt-kanton-zuerich</a><a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn1"><p>Das steuerbare Einkommen ist wie folgt definiert: <em>“Beim steuerbaren Einkommen handelt es sich um die steuerbaren Bruttoeinkünfte abzüglich den Gewinnungskosten, den allgemeinen Abzügen sowie den Sozialabzügen.” (</em><a href="#0">Quelle: https://www.stadt-zuerich.ch/artikel/de/statistik-und-daten/2017-08-29_einkommen-in-der-stadt-zuerich-steigen.html</a>)<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p><a href="https://www.zh.ch/de/politik-staat/statistik-daten/datenkatalog.html#/datasets/245@statistisches-amt-kanton-zuerich">https://www.zh.ch/de/politik-staat/statistik-daten/datenkatalog.html#/datasets/245@statistisches-amt-kanton-zuerich</a><a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p><a href="https://www.zh.ch/de/politik-staat/statistik-daten/datenkatalog.html#/datasets/246@statistisches-amt-kanton-zuerich">https://www.zh.ch/de/politik-staat/statistik-daten/datenkatalog.html#/datasets/246@statistisches-amt-kanton-zuerich</a><a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4"><p><a href="https://www.zh.ch/de/politik-staat/statistik-daten/datenkatalog.html#/datasets/249@statistisches-amt-kanton-zuerich">https://www.zh.ch/de/politik-staat/statistik-daten/datenkatalog.html#/datasets/249@statistisches-amt-kanton-zuerich</a><a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn5"><p>Stand Geodaten: 26.01.2024. Die Daten sind hier verfügbar: <a href="#0">https://www.stadt-zuerich.ch/geodaten/download/95</a>.<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section></div></main>
 <!-- /main column -->
@@ -487,12 +879,12 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     // flash "checked"
     button.classList.add('code-copy-button-checked');
     var currentTitle = button.getAttribute("title");
-    button.setAttribute("title", "Copied!");
+    button.setAttribute("title", "Kopiert");
     let tooltip;
     if (window.bootstrap) {
       button.setAttribute("data-bs-toggle", "tooltip");
       button.setAttribute("data-bs-placement", "left");
-      button.setAttribute("data-bs-title", "Copied!");
+      button.setAttribute("data-bs-title", "Kopiert");
       tooltip = new bootstrap.Tooltip(button, 
         { trigger: "manual", 
           customClass: "code-copy-button-tooltip",
